@@ -1,4 +1,4 @@
-# The example code to demonstrate integration with Snapdocs API
+# The ACME Lender
 
 This repository has the example code to help our customers to test and integrate with the Snapdocs APIs.
 
