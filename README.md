@@ -2,15 +2,30 @@
 
 This repository has the example code to help our customers to test and integrate with the Snapdocs APIs.
 
-## Features
+## Project Structure
 
-1. a python utility to confirm the oauth credentials
+We have example code in below programming languages
+
+* Python
+* Node.js
+* Java
+* Go
+
+## Example Programs
+
+1. To confirm the oauth credentials
 2. a simple AWS Lambda function to serve as the webhook service to listen to Snapdocs events, and download the scanback documents.
-3. a python utility to manage subscriptions
+3. To create closings, and manage subscriptions
 
 ## Configuration
 
-This python project uses .env to load configuration items. For local testing, you can create a file ".env" as below
+All the programs (regardless programming languages) are expecting configuration items from environment variables.
+
+## Environment Variables
+We use .env to manage environment variables since it is widely supported.
+
+### Non-Secrets
+For local testing, you can create a file ".env" as below
 
 ````
 SNAPDOCS_TOKEN_URL=https://auth.cs-demo0.snpd.io/oauth/token
@@ -20,31 +35,32 @@ SNAPDOCS_API_CLIENT_SECRET=...
 SNAPDOCS_API_SCOPE=...
 LOG_LEVEL=INFO
 ````
-the client_id and secret must be valid. The scope can have multiple scopes separated by space.
+The SNAPDOCS_API_CLIENT_ID and SNAPDOCS_API_CLIENT_SECRET must be valid and match the testing hosts.
+The scope can have multiple scopes separated by space.
+
+### Secrets
 
 If you want to test the AWS Lambda and API Gateway for the webhook service, then the oauth client id and secret should be deployed through AWS Secret Manager.
-In that case, your .env file (or .env.dev) remove the client id and secret variables.
-
-## Secrets
-Only needed when you deploy the Lambda example to AWS
 Go to AWS Console, select the "Secret Manager" service, add a new secret (check the "Other type of secret")
 Add two rows of key-value pairs.
 ````
-key:client_id
+key:SNAPDOCS_API_CLIENT_ID
 value: the oauth client id
 ````
 and
 ````
-key: client_secret
+key: SNAPDOCS_API_CLIENT_SECRET
 value: the oauth client secret
 ````
 Use the "DefaultEncryptionKey"
 
 On the next screen, enter the secret name "dev/example-snapdocs-event-listener/oauth", accept all the default values and store the secret.
 
+
+
 ## Webhook Service (Listener)
 
-The webhook (a lambda behind API gateway) has endpoint "dev/example-snapdocs-event-listener/oauth", that we can register at Snapdocs and receive events.
+The webhook (a lambda behind API gateway), that we can register at Snapdocs and receive events.
 
 
 ## Deploy the Snapdocs event listener example (webhook service) to AWS
@@ -52,6 +68,7 @@ The webhook (a lambda behind API gateway) has endpoint "dev/example-snapdocs-eve
 First, install the serverless framework at your local computer
 
 ````
+cd [python/go/node.js/java folder]
 npm install -g serverless
 serverless plugin install -n serverless-python-requirements
 ````

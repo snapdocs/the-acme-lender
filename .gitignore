@@ -1,8 +1,8 @@
-/.env
-/node_modules/
-/venv/
-/.serverless/
+**/.env
+**/node_modules/
+**/venv/
+**/.serverless/
 /.history/
 /.idea/
-/package-lock.json
-/.requirements.zip
+**/package-lock.json
+**/.requirements.zip

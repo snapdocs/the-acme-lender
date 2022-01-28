@@ -1,4 +1,4 @@
-service: example-snapdocs-event-listener
+service: example-snapdocs-event-listener-python
 
 frameworkVersion: '3'
 
