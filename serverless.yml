@@ -4,14 +4,23 @@ frameworkVersion: '3'
 
 useDotenv: true
 
+custom:
+  pythonRequirements:
+    #usePoetry: false
+    #dockerizePip: true
+    #layer: true
+    #zip: true
+
 provider:
   name: aws
-  runtime: python3.8
-  lambdaHashingVersion: 20201221
+  runtime: python3.9
   # the "env" (dev, qa, prod) and region would be passed from the deployment tool chain, including CI/CD, or terraform
   # or Ansible
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-west-2'}
+  environment:
+    ENV: ${self:provider.stage}
+
 
   stackTags:
     env: ${opt:stage, self:provider.stage}
@@ -23,14 +32,21 @@ provider:
       statements:
         - Effect: Allow
           Action:
-            - secretsmanager:*
-          Resource: "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${self:provider.stage}/example-snapdocs-event-listener/*"
-
+            - secretsmanager:GetSecretValue
+          Resource: "arn:aws:secretsmanager:*:*:secret:${self:provider.stage}/example-snapdocs-event-listener/*"
+package:
+  individually: true
+  exclude:
+    - venv/**
+    - node_modules/**
+    - .history/**
+    - requirements.txt
+    - package-lock.json
 functions:
   snapdocs-event-listener:
     handler: snapdocs_event_handler.handle
     description: the webhook service to receive the snapdocs broadcasted events
-    timeout: 900
+    timeout: 30
     events:
       - http:
           path: listen/snapdocs
