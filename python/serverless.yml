@@ -1,11 +1,11 @@
-service: example-snapdocs-event-listener-python
+service: example-snapdocs-listener-python
 
 frameworkVersion: '3'
 
 useDotenv: true
 
-custom:
-  pythonRequirements:
+#custom:
+  #pythonRequirements:
     #usePoetry: false
     #dockerizePip: true
     #layer: true
