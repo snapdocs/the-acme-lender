@@ -17,8 +17,11 @@ SNAPDOCS_TOKEN_URL=https://auth.cs-demo0.snpd.io/oauth/token
 SNAPDOCS_API_URL=https://api.cs-demo0.snpd.io/api/v1
 SNAPDOCS_API_CLIENT_ID=...
 SNAPDOCS_API_CLIENT_SECRET=...
+SNAPDOCS_API_SCOPE=...
 LOG_LEVEL=INFO
 ````
+the client_id and secret must be valid. The scope can have multiple scopes separated by space.
+
 If you want to test the AWS Lambda and API Gateway for the webhook service, then the oauth client id and secret should be deployed through AWS Secret Manager.
 In that case, your .env file (or .env.dev) remove the client id and secret variables.
 

@@ -8,15 +8,16 @@ load_dotenv()
 token_url = os.environ.get('SNAPDOCS_TOKEN_URL')
 
 test_api_url = os.environ.get('SNAPDOCS_API_URL') + "/subscriptions"
-
-client_id = os.environ.get('SNAPDOCS_API_CLIENT_ID')
-client_secret = os.environ.get('SNAPDOCS_API_CLIENT_SECRET')
-
-data = {'grant_type': 'client_credentials'}
+data = {
+    "client_id": os.environ.get('SNAPDOCS_API_CLIENT_ID'),
+    "client_secret": os.environ.get('SNAPDOCS_API_CLIENT_SECRET'),
+    "scope": "subscriptions:index",
+    'grant_type': 'client_credentials'
+}
 
 s = Session()
 
-access_token_response = s.post(token_url, data=data, verify=True, allow_redirects=False, auth=(client_id, client_secret))
+access_token_response = s.post(token_url, data=data)
 access_token_response.raise_for_status()
 print(access_token_response)
 

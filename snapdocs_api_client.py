@@ -21,13 +21,18 @@ class FullEclosingSigningMethod(enum.Enum):
 
 
 class SnapdocsApiClient():
+
     def refresh_oauth_token(self):
         token_url = os.environ.get('SNAPDOCS_TOKEN_URL')
-        client_id = os.environ.get('SNAPDOCS_API_CLIENT_ID')
-        client_secret = os.environ.get('SNAPDOCS_API_CLIENT_SECRET')
-        data = {'grant_type': 'client_credentials'}
-        access_token_response = self.session.post(token_url, data=data, verify=True, allow_redirects=False,
-                                                  auth=(client_id, client_secret))
+
+        data = {
+            "client_id": os.environ.get('SNAPDOCS_API_CLIENT_ID'),
+            "client_secret": os.environ.get('SNAPDOCS_API_CLIENT_SECRET'),
+            "scope": os.environ.get('SNAPDOCS_API_SCOPE'),
+            'grant_type': 'client_credentials'
+        }
+        print(data)
+        access_token_response = self.session.post(token_url, data=data)
         access_token_response.raise_for_status()
         return access_token_response.json()['access_token']
 

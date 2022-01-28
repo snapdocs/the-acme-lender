@@ -42,6 +42,7 @@ package:
     - .history/**
     - requirements.txt
     - package-lock.json
+    - .env*
 functions:
   snapdocs-event-listener:
     handler: snapdocs_event_handler.handle
@@ -55,6 +56,7 @@ functions:
       # pass the environment from .env.dev to Lambda
       SNAPDOCS_TOKEN_URL: ${env:SNAPDOCS_TOKEN_URL}
       SNAPDOCS_API_URL: ${env:SNAPDOCS_API_URL}
+      SNAPDOCS_API_SCOPE: ${env:SNAPDOCS_API_SCOPE}
       LOG_LEVEL: ${env:LOG_LEVEL}
 
 
