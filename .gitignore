@@ -6,3 +6,4 @@
 /.idea/
 **/package-lock.json
 **/.requirements.zip
+python/__pycache__/*
