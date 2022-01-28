@@ -17,7 +17,7 @@ success_body = {
 
 def download_scanback_document(closing_uuid, document_uuid):
     logger.info("downloading scanback document %s", document_uuid)
-    load_secrets_to_environments()
+    load_secrets_to_environments(f"{os.getenv('ENV')}/example-snapdocs-event-listener/oauth")
     client = SnapdocsApiClient()
     client.download_document(closing_uuid, document_uuid)
     pass
