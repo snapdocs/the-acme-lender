@@ -8,14 +8,18 @@ def load_secrets_to_environments(secret_id):
     try:
         client = boto3.client('secretsmanager')
         response = client.get_secret_value(
-            SecretId=f"{os.getenv('ENV')}/example-snapdocs-event-listener/oauth"
+            SecretId=secret_id
         )
 
-        oauth_credentials = json.loads(response['SecretString'])
+        secret = json.loads(response['SecretString'])
         # iterate each key-value pair and set to os environment variables
-        
-        os.environ['SNAPDOCS_API_CLIENT_ID'] = oauth_credentials['client_id']
-        os.environ['SNAPDOCS_API_CLIENT_SECRET'] = oauth_credentials['client_secret']
+        for key in secret:
+            os.environ[key] = secret[key]
     except Exception as e:
         logging.error(e)
         raise
+
+if __name__ == '__main__':
+    import sys
+    print(sys.argv[1])
+    load_secrets_to_environments(sys.argv[1])
