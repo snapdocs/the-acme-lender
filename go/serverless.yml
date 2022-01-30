@@ -1,0 +1,52 @@
+service: example-snapdocs-listener-go
+frameworkVersion: ">=2.24.0"
+useDotenv: true
+
+
+provider:
+  name: aws
+  runtime: go1.x
+  # the "env" (dev, qa, prod) and region would be passed from the deployment tool chain, including CI/CD, or terraform
+  # or Ansible
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-west-2'}
+  environment:
+    ENV: ${self:provider.stage}
+
+
+  stackTags:
+    env: ${opt:stage, self:provider.stage}
+    managed: Serverless Framework
+    project: ${self:service}
+    owner: api team
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - secretsmanager:GetSecretValue
+          Resource: "arn:aws:secretsmanager:*:*:secret:${self:provider.stage}/example-snapdocs-event-listener/*"
+
+package:
+  exclude:
+    - ./**
+  include:
+    - ./bin/**
+
+functions:
+  example-snapdocs-listener-go:
+    handler: bin/lambda
+    description: the Go webhook service to receive the snapdocs broadcasted events
+    timeout: 30
+    events:
+      - http:
+          path: listen/snapdocs
+          method: post
+    environment:
+      # pass the environment from .env.dev to Lambda
+      SNAPDOCS_TOKEN_URL: ${env:SNAPDOCS_TOKEN_URL}
+      SNAPDOCS_API_URL: ${env:SNAPDOCS_API_URL}
+      SNAPDOCS_API_SCOPE: ${env:SNAPDOCS_API_SCOPE}
+      LOG_LEVEL: ${env:LOG_LEVEL}
+
+
