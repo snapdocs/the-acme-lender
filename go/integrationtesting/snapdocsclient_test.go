@@ -5,20 +5,8 @@ import (
 	"os"
 	"testing"
 
-	log "github.com/sirupsen/logrus"
-
-	"github.com/joho/godotenv"
 	"github.com/snapdocs/the-acme-lender/pkg/snapdocs"
 )
-
-func setup() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-	level, _ := log.ParseLevel(os.Getenv("LOG_LEVEL"))
-	log.SetLevel(level)
-}
 
 func TestSnapdocsApiClient_GetSubscriptions(t *testing.T) {
 

@@ -26,6 +26,18 @@ provider:
           Action:
             - secretsmanager:GetSecretValue
           Resource: "arn:aws:secretsmanager:*:*:secret:${self:provider.stage}/example-snapdocs-event-listener/*"
+        - Effect: Allow
+          Action:
+            - sqs:*
+          Resource: "arn:aws:sqs:*:*:${self:provider.stage}-${self:service}.fifo"
+resources:
+  Resources:
+    NewSQSQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: ${self:provider.stage}-${self:service}.fifo
+        FifoQueue: true
+        ContentBasedDeduplication: true
 
 package:
   exclude:
@@ -35,7 +47,7 @@ package:
 
 functions:
   example-snapdocs-listener-go:
-    handler: bin/lambda
+    handler: bin/webhooklambda
     description: the Go webhook service to receive the snapdocs broadcasted events
     timeout: 30
     events:
@@ -48,5 +60,6 @@ functions:
       SNAPDOCS_API_URL: ${env:SNAPDOCS_API_URL}
       SNAPDOCS_API_SCOPE: ${env:SNAPDOCS_API_SCOPE}
       LOG_LEVEL: ${env:LOG_LEVEL}
+      QUEUE_NAME: ${env:QUEUE_NAME}
 
 

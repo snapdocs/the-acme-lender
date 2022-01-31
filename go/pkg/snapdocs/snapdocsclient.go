@@ -52,16 +52,17 @@ func (p *SnapdocsApiClient) GetSubscriptions() (string, error) {
 		log.Error("Failed to query", err)
 		return "", err
 	}
+	err = RaiseForStatus(resp)
+	if err != nil {
+		return "", err
+	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Error("Failed to parse response", err)
 		return "", err
 	}
-	err = RaiseForStatus(resp)
-	if err != nil {
-		return "", err
-	}
+
 	return string(body), nil
 }
 
@@ -94,7 +95,11 @@ func RaiseForStatus(resp *http.Response) error {
 	code := resp.StatusCode
 	statusOk := code >= 200 && code < 300
 	if !statusOk {
-		return fmt.Errorf("http response code %d", code)
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Error("Failed to parse response", err)
+		}
+		return fmt.Errorf("http response code %d %s", code, string(body))
 	}
 	return nil
 }
