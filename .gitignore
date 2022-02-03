@@ -7,3 +7,5 @@
 **/package-lock.json
 **/.requirements.zip
 python/__pycache__/*
+.DS_Store
+go/bin/*

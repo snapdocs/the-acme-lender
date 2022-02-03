@@ -10,11 +10,12 @@ We have example code in below programming languages
 * Node.js
 * Java
 * Go
+* C#
 
 ## Example Programs
 
 1. To confirm the oauth credentials
-2. a simple AWS Lambda function to serve as the webhook service to listen to Snapdocs events, and download the scanback documents.
+2. a simple AWS Lambda function to listen to Snapdocs events, and download the scanback documents.
 3. To create closings, and manage subscriptions
 
 ## Configuration
@@ -40,7 +41,8 @@ The scope can have multiple scopes separated by space.
 
 ### Secrets
 
-If you want to test the AWS Lambda and API Gateway for the webhook service, then the oauth client id and secret should be deployed through AWS Secret Manager.
+If you want to test the webhook with example AWS Lambda and API Gateway , the oauth client id and secret should be deployed through AWS Secret Manager.
+
 Go to AWS Console, select the "Secret Manager" service, add a new secret (check the "Other type of secret")
 Add two rows of key-value pairs.
 ````
@@ -57,15 +59,16 @@ Use the "DefaultEncryptionKey"
 On the next screen, enter the secret name "dev/example-snapdocs-event-listener/oauth", accept all the default values and store the secret.
 
 
-
 ## Webhook Service (Listener)
 
-The webhook (a lambda behind API gateway), that we can register at Snapdocs and receive events.
+The webhook (a lambda behind API gateway), that  can register at Snapdocs and receive events.
 
 
 ## Deploy the Snapdocs event listener example (webhook service) to AWS
 
-First, install the serverless framework at your local computer
+1. edit the .env.dev file to make sure you have the correct URLs and scope.
+
+2. install the serverless framework https://www.serverless.com/framework/docs/getting-started
 
 ````
 cd [python/go/node.js/java folder]
@@ -73,7 +76,8 @@ npm install -g serverless
 serverless plugin install -n serverless-python-requirements
 ````
 
-Deploy to AWS, for example us-west-2 region, environment "dev"
+3. Deploy to AWS, for example us-west-2 region, environment "dev", assuming you have the AWS profile set up in your ~/.aws/credentials file and have the permissions to create AWS stacks.
+
 ````
 serverless deploy --stage dev --region us-west-2 --verbose --aws-profile [the AWS profile name that you use]
 ````
@@ -119,10 +123,3 @@ curl --location --request POST 'https://.....execute-api.us-west-2.amazonaws.com
   }
 }'
 ````
-
-## Register the webhook
-
-
-## Create a closing
-
-## Upload Documents
