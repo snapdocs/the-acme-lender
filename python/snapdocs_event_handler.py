@@ -33,6 +33,8 @@ def process_snapdocs_event(event_body):
         if event_body.get('event_name') == 'document.created':
             if event_body.get('document_type') == 'scanback_documents':
                 download_scanback_document(event_body.get('closing_uuid'), event_body.get('document_uuid'))
+            else:
+                pass
     except Exception as e:
         logger.error(e)
         return 500, {
