@@ -86,10 +86,10 @@ namespace ClosingsAndDocs.Model
             [EnumMember(Value = "file_number")]
             Filenumber = 3,
             /// <summary>
-            /// Enum Byteid for value: byte_id
+            /// Enum Filedataid for value:
             /// </summary>
-            [EnumMember(Value = "byte_id")]
-            Byteid = 4        }
+            [EnumMember(Value = "file_data_id")]
+            Filedataid = 4        }
         /// <summary>
         /// The type of the external identifier.
         /// </summary>
@@ -132,7 +132,7 @@ namespace ClosingsAndDocs.Model
                 this.Value = value;
             }
         }
-        
+
 
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace ClosingsAndDocs.Model
             sb.Append("}\n");
             return sb.ToString();
         }
-  
+
         /// <summary>
         /// Returns the JSON string presentation of the object
         /// </summary>
@@ -186,17 +186,17 @@ namespace ClosingsAndDocs.Model
             if (input == null)
                 return false;
 
-            return 
+            return
                 (
                     this.ExternalSystem == input.ExternalSystem ||
                     (this.ExternalSystem != null &&
                     this.ExternalSystem.Equals(input.ExternalSystem))
-                ) && 
+                ) &&
                 (
                     this.ExternalType == input.ExternalType ||
                     (this.ExternalType != null &&
                     this.ExternalType.Equals(input.ExternalType))
-                ) && 
+                ) &&
                 (
                     this.Value == input.Value ||
                     (this.Value != null &&
