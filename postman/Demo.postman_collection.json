@@ -1,13 +1,12 @@
 {
 	"info": {
-		"_postman_id": "81cf1048-d550-47f8-8765-f4b335bfed40",
+		"_postman_id": "b96a1ae0-d18e-4f76-bbc1-2541aa943917",
 		"name": "Demo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Create Closing",
-			"roles": "los",
 			"item": [
 				{
 					"name": "Step 1 create a closing record",
@@ -28,18 +27,18 @@
 								"exec": [
 									"// today format yyyy-mm-dd",
 									"var d1 = new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0];",
+									"var today = new Date()",
+									"var ts = (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0') +today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0')",
+									"pm.collectionVariables.set(\"appointment_earliest_at\", today.toISOString().split('T')[0]);",
+									"pm.collectionVariables.set(\"appointment_date\", today.toISOString().split('T')[0]);",
 									"",
-									"// the last day of the year",
-									"var d365 = new Date(new Date().getFullYear(), 11, 31).toISOString().split('T')[0];",
-									"var today = new Date().toISOString().split('T')[0]",
-									"var ts = (new Date().getMonth() + 1).toString().padStart(2, '0') + new Date().getDate().toString().padStart(2, '0') + new Date().getHours().toString().padStart(2, '0') + new Date().getMinutes().toString().padStart(2, '0')",
-									"pm.collectionVariables.set(\"appointment_earliest_at\", d1);",
-									"pm.collectionVariables.set(\"appointment_latest_at\", d365);",
-									"pm.collectionVariables.set(\"appointment_date\", today);",
+									"today.setDate(today.getDate() + 7)",
+									"pm.collectionVariables.set(\"appointment_latest_at\", today.toISOString().split('T')[0]);",
 									"",
 									"pm.collectionVariables.set(\"borrower_1_last_name\", \"Test\" + ts)",
-									"",
+									"pm.collectionVariables.set(\"borrower_1_email\", \"borrower1.Test\" + ts+\"@snapdocs.com\")",
 									"pm.collectionVariables.set(\"borrower_2_last_name\", \"Test\" + ts)",
+									"pm.collectionVariables.set(\"borrower_2_email\", \"borrower2.Test\" + ts+\"@snapdocs.com\")",
 									"pm.collectionVariables.set(\"file_number\", \"file\"+ts)",
 									"pm.collectionVariables.set(\"external_value\", \"loan\" + ts)",
 									"pm.collectionVariables.set(\"timestamp\", ts)"
@@ -69,7 +68,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n     \"signing_method\": \"hybrid\",\n  \"reference_id\": \"{{loan_guid}}\",\n     \"file_number\": \"{{file_number}}\",\n     \"property_street_address\": \"123 Main Street\",\n     \"property_city\": \"Austin\",\n     \"property_state\": \"Texas\",\n     \"property_zip\": \"78701\",\n     \"appointment_earliest_at\": \"{{appointment_earliest_at}}\",\n    \"appointment_latest_at\": \"{{appointment_latest_at}}\",\n    \"appointment_date\": \"{{appointment_date}}\",\n    \"appointment_time\": \"11:45 pm\",\n     \"settlement_office_email\": \"settlement@settlement.com\",\n     \"settlement_office_name\": \"Settlement Office\",\n     \"borrowers\": [\n          {\n               \"first_name\": \"{{borrower_1_first_name}}\",\n               \"last_name\": \"{{borrower_1_last_name}}\",\n               \"email\": \"{{borrower_1_email}}\",\n               \"phone\": \"{{borrower_1_phone}}\"\n          }\n     ],\n     \"closing_users\": [\n     ],\n     \"settlement_agents\": [\n          {\n               \"first_name\": \"Settlement\",\n               \"last_name\": \"Agent\",\n               \"email\": \"sa@settlement.com\"\n          }\n     ],\n     \"external_identifiers\": [\n        {\n               \"external_system\": \"{{external_system1}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system2}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system3}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        }\n     ]\n}"
+							"raw": "{\n     \"signing_method\": \"hybrid\",\n  \"reference_id\": \"{{loan_guid}}\",\n     \"file_number\": \"{{file_number}}\",\n     \"property_street_address\": \"123 Main Street\",\n     \"property_city\": \"Austin\",\n     \"property_state\": \"Texas\",\n     \"property_zip\": \"78701\",\n     \"appointment_earliest_at\": \"{{appointment_earliest_at}}\",\n    \"appointment_latest_at\": \"{{appointment_latest_at}}\",\n    \"appointment_date\": \"{{appointment_date}}\",\n    \"appointment_time\": \"11:45 pm\",\n     \"settlement_office_email\": \"settlement@settlement.com\",\n     \"settlement_office_name\": \"Settlement Office\",\n    \"loan_type\": \"Conventional\",\n    \"loan_purpose\": \"Purchase\",\n     \"borrowers\": [\n          {\n               \"first_name\": \"{{borrower_1_first_name}}\",\n               \"last_name\": \"{{borrower_1_last_name}}\",\n               \"email\": \"{{borrower_1_email}}\",\n               \"phone\": \"{{borrower_1_phone}}\"\n          }\n     ],\n     \"closing_users\": [\n         {\n            \"first_name\": \"The\",\n            \"last_name\": \"Closer\",\n            \"phone\": \"5555555555\",\n            \"email\": \"jerry.you+closinguser@snapdocs.com\",\n            \"roles\": [\n                \"closer\"\n            ]\n        },\n         {\n            \"first_name\": \"The\",\n            \"last_name\": \"Scheduler\",\n            \"phone\": \"5555555555\",\n            \"email\": \"jerry.you+lenderconnectedclient@snapdocs.com\",\n            \"roles\": [\n               \n            ]\n        }\n     ],\n     \"settlement_agents\": [\n          {\n               \"first_name\": \"Settlement\",\n               \"last_name\": \"Agent\",\n               \"email\": \"sa@settlement.com\"\n          }\n     ],\n     \"external_identifiers\": [\n        {\n               \"external_system\": \"{{external_system1}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system2}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system3}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        }\n     ]\n}"
 						},
 						"url": {
 							"raw": "{{BaseUrl}}/api/v1/closings",
@@ -199,7 +198,6 @@
 		},
 		{
 			"name": "Query Closing",
-			"roles": "los,tps,pos",
 			"item": [
 				{
 					"name": "Get Closing Status",
@@ -348,7 +346,6 @@
 		},
 		{
 			"name": "Manage Closing",
-			"roles": "los",
 			"item": [
 				{
 					"name": "complete closing",
@@ -583,7 +580,6 @@
 		},
 		{
 			"name": "Full Redraw",
-			"roles": "los",
 			"item": [
 				{
 					"name": "Step 1 full redraw",
@@ -604,20 +600,20 @@
 								"exec": [
 									"// today format yyyy-mm-dd",
 									"var d1 = new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0];",
+									"var today = new Date()",
+									"var ts = (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0') +today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0')",
+									"pm.collectionVariables.set(\"appointment_earliest_at\", today.toISOString().split('T')[0]);",
+									"pm.collectionVariables.set(\"appointment_date\", today.toISOString().split('T')[0]);",
 									"",
-									"// the last day of the year",
-									"var d365 = new Date(new Date().getFullYear(), 11, 31).toISOString().split('T')[0];",
-									"var today = new Date().toISOString().split('T')[0]",
-									"var ts = (new Date().getMonth() + 1).toString().padStart(2, '0') + new Date().getDate().toString().padStart(2, '0') + new Date().getHours().toString().padStart(2, '0') + new Date().getMinutes().toString().padStart(2, '0')",
-									"pm.collectionVariables.set(\"appointment_earliest_at\", d1);",
-									"pm.collectionVariables.set(\"appointment_latest_at\", d365);",
-									"pm.collectionVariables.set(\"appointment_date\", today);",
+									"today.setDate(today.getDate() + 7)",
+									"pm.collectionVariables.set(\"appointment_latest_at\", today.toISOString().split('T')[0]);",
 									"",
 									"pm.collectionVariables.set(\"borrower_1_last_name\", \"Test\" + ts)",
-									"",
+									"pm.collectionVariables.set(\"borrower_1_email\", \"borrower1.Test\" + ts+\"@snapdocs.com\")",
 									"pm.collectionVariables.set(\"borrower_2_last_name\", \"Test\" + ts)",
+									"pm.collectionVariables.set(\"borrower_2_email\", \"borrower2.Test\" + ts+\"@snapdocs.com\")",
 									"pm.collectionVariables.set(\"file_number\", \"file\"+ts)",
-									"pm.collectionVariables.set(\"loan_guid\", \"loan\" + ts)",
+									"pm.collectionVariables.set(\"external_value\", \"loan\" + ts)",
 									"pm.collectionVariables.set(\"timestamp\", ts)"
 								],
 								"type": "text/javascript"
@@ -645,7 +641,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n     \"signing_method\": \"hybrid\",\n     \"source\": \"encompass\",\n     \"reference_id\": \"{{loan_guid}}\",\n     \"file_number\": \"{{file_number}}\",\n     \"funding_team_email\": \"isaac+closings@snapdocs.com\",\n     \"property_street_address\": \"1010 Van Ness St\",\n     \"property_city\": \"Austin\",\n     \"property_state\": \"Texas\",\n     \"property_zip\": \"78701\",\n     \"appointment_earliest_at\": \"{{appointment_earliest_at}}\",\n    \"appointment_latest_at\": \"{{appointment_latest_at}}\",\n    \"appointment_date\": \"{{appointment_date}}\",\n    \"appointment_time\": \"11:45 pm\",\n     \"settlement_office_email\": \"settlement@settlement.com\",\n     \"settlement_office_name\": \"Settlement Office\",\n     \"borrowers\": [\n          {\n               \"first_name\": \"{{borrower_1_first_name}}\",\n               \"last_name\": \"{{borrower_1_last_name}}\",\n               \"email\": \"{{borrower_1_email}}\",\n               \"phone\": \"{{borrower_1_phone}}\"\n          }\n     ],\n     \"closing_users\": [\n     ],\n     \"settlement_agents\": [\n          {\n               \"first_name\": \"Settlement\",\n               \"last_name\": \"Agent\",\n               \"email\": \"sa@settlement.com\"\n          }\n     ],\n     \"external_identifiers\": [\n      ]\n}"
+							"raw": "{\n     \"signing_method\": \"hybrid\",\n  \"reference_id\": \"{{loan_guid}}\",\n     \"file_number\": \"{{file_number}}\",\n     \"property_street_address\": \"123 Main Street\",\n     \"property_city\": \"Austin\",\n     \"property_state\": \"Texas\",\n     \"property_zip\": \"78701\",\n     \"appointment_earliest_at\": \"{{appointment_earliest_at}}\",\n    \"appointment_latest_at\": \"{{appointment_latest_at}}\",\n    \"appointment_date\": \"{{appointment_date}}\",\n    \"appointment_time\": \"11:45 pm\",\n     \"settlement_office_email\": \"settlement@settlement.com\",\n     \"settlement_office_name\": \"Settlement Office\",\n    \"loan_type\": \"Conventional\",\n    \"loan_purpose\": \"Purchase\",\n     \"borrowers\": [\n          {\n               \"first_name\": \"{{borrower_1_first_name}}\",\n               \"last_name\": \"{{borrower_1_last_name}}\",\n               \"email\": \"{{borrower_1_email}}\",\n               \"phone\": \"{{borrower_1_phone}}\"\n          }\n     ],\n     \"closing_users\": [\n         {\n            \"first_name\": \"The\",\n            \"last_name\": \"Closer\",\n            \"phone\": \"5555555555\",\n            \"email\": \"jerry.you+closinguser@snapdocs.com\",\n            \"roles\": [\n                \"closer\"\n            ]\n        },\n         {\n            \"first_name\": \"The\",\n            \"last_name\": \"Scheduler\",\n            \"phone\": \"5555555555\",\n            \"email\": \"jerry.you+lenderconnectedclient@snapdocs.com\",\n            \"roles\": [\n               \n            ]\n        }\n     ],\n     \"settlement_agents\": [\n          {\n               \"first_name\": \"Settlement\",\n               \"last_name\": \"Agent\",\n               \"email\": \"sa@settlement.com\"\n          }\n     ],\n     \"external_identifiers\": [\n        {\n               \"external_system\": \"{{external_system1}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system2}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system3}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        }\n     ]\n}"
 						},
 						"url": {
 							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/full_redraw",
@@ -777,7 +773,6 @@
 		},
 		{
 			"name": "Signing Appointment",
-			"roles": "los,tps,pos",
 			"item": [
 				{
 					"name": "Get Closing Appointment",
@@ -892,7 +887,6 @@
 		},
 		{
 			"name": "Borrowers",
-			"roles": "los,tps,pos",
 			"item": [
 				{
 					"name": "Get Borrowers",
@@ -1034,7 +1028,6 @@
 		},
 		{
 			"name": "Documents",
-			"roles": "los,tps,pos",
 			"item": [
 				{
 					"name": "Upload Redraw Document",
@@ -1338,7 +1331,6 @@
 		},
 		{
 			"name": "Compliance",
-			"roles": "los",
 			"item": [
 				{
 					"name": "Get Audit Trail of Company",
@@ -1452,7 +1444,6 @@
 		},
 		{
 			"name": "Scanbacks",
-			"roles": "los,tps",
 			"item": [
 				{
 					"name": "Upload scanback document",
@@ -1705,12 +1696,12 @@
 		},
 		{
 			"key": "ClientId",
-			"value": "",
+			"value": "HXcpqlxOEBNMHxv5wIxBxYvsLnPqmQMo",
 			"type": "default"
 		},
 		{
 			"key": "ClientSecret",
-			"value": "",
+			"value": "QIBtfjn8iTiCSdWx1Ql5McKmpxPzr71lITRVd80XEyXBpHyffJWW76oYflTwJXB1",
 			"type": "default"
 		},
 		{
@@ -1730,12 +1721,12 @@
 		},
 		{
 			"key": "appointment_earliest_at",
-			"value": "2022-01-01",
+			"value": "",
 			"type": "default"
 		},
 		{
 			"key": "appointment_latest_at",
-			"value": "2022-12-31",
+			"value": "",
 			"type": "default"
 		},
 		{
@@ -1750,7 +1741,7 @@
 		},
 		{
 			"key": "borrower_1_email",
-			"value": "borrower1@example.com",
+			"value": "",
 			"type": "default"
 		},
 		{
@@ -1765,7 +1756,7 @@
 		},
 		{
 			"key": "borrower_2_email",
-			"value": "borrower2@example.com",
+			"value": "",
 			"type": "default"
 		},
 		{
