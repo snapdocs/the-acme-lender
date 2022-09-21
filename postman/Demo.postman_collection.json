@@ -1,0 +1,1818 @@
+{
+	"info": {
+		"_postman_id": "b96a1ae0-d18e-4f76-bbc1-2541aa943917",
+		"name": "Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Closing",
+			"item": [
+				{
+					"name": "Step 1 create a closing record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"ClosingUUID\", jsonData.closing_uuid);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// today format yyyy-mm-dd",
+									"var d1 = new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0];",
+									"var today = new Date()",
+									"var ts = (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0') +today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0')",
+									"pm.collectionVariables.set(\"appointment_earliest_at\", today.toISOString().split('T')[0]);",
+									"pm.collectionVariables.set(\"appointment_date\", today.toISOString().split('T')[0]);",
+									"",
+									"today.setDate(today.getDate() + 7)",
+									"pm.collectionVariables.set(\"appointment_latest_at\", today.toISOString().split('T')[0]);",
+									"",
+									"pm.collectionVariables.set(\"borrower_1_last_name\", \"Test\" + ts)",
+									"pm.collectionVariables.set(\"borrower_1_email\", \"borrower1.Test\" + ts+\"@snapdocs.com\")",
+									"pm.collectionVariables.set(\"borrower_2_last_name\", \"Test\" + ts)",
+									"pm.collectionVariables.set(\"borrower_2_email\", \"borrower2.Test\" + ts+\"@snapdocs.com\")",
+									"pm.collectionVariables.set(\"file_number\", \"file\"+ts)",
+									"pm.collectionVariables.set(\"external_value\", \"loan\" + ts)",
+									"pm.collectionVariables.set(\"timestamp\", ts)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"signing_method\": \"hybrid\",\n  \"reference_id\": \"{{loan_guid}}\",\n     \"file_number\": \"{{file_number}}\",\n     \"property_street_address\": \"123 Main Street\",\n     \"property_city\": \"Austin\",\n     \"property_state\": \"Texas\",\n     \"property_zip\": \"78701\",\n     \"appointment_earliest_at\": \"{{appointment_earliest_at}}\",\n    \"appointment_latest_at\": \"{{appointment_latest_at}}\",\n    \"appointment_date\": \"{{appointment_date}}\",\n    \"appointment_time\": \"11:45 pm\",\n     \"settlement_office_email\": \"settlement@settlement.com\",\n     \"settlement_office_name\": \"Settlement Office\",\n    \"loan_type\": \"Conventional\",\n    \"loan_purpose\": \"Purchase\",\n     \"borrowers\": [\n          {\n               \"first_name\": \"{{borrower_1_first_name}}\",\n               \"last_name\": \"{{borrower_1_last_name}}\",\n               \"email\": \"{{borrower_1_email}}\",\n               \"phone\": \"{{borrower_1_phone}}\"\n          }\n     ],\n     \"closing_users\": [\n         {\n            \"first_name\": \"The\",\n            \"last_name\": \"Closer\",\n            \"phone\": \"5555555555\",\n            \"email\": \"jerry.you+closinguser@snapdocs.com\",\n            \"roles\": [\n                \"closer\"\n            ]\n        },\n         {\n            \"first_name\": \"The\",\n            \"last_name\": \"Scheduler\",\n            \"phone\": \"5555555555\",\n            \"email\": \"jerry.you+lenderconnectedclient@snapdocs.com\",\n            \"roles\": [\n               \n            ]\n        }\n     ],\n     \"settlement_agents\": [\n          {\n               \"first_name\": \"Settlement\",\n               \"last_name\": \"Agent\",\n               \"email\": \"sa@settlement.com\"\n          }\n     ],\n     \"external_identifiers\": [\n        {\n               \"external_system\": \"{{external_system1}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system2}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system3}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        }\n     ]\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				},
+				{
+					"name": "step 2 upload original document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/pdf",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "demo_docs.pdf"
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents?document_type=original_documents&filename=demo_docs.pdf",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents"
+							],
+							"query": [
+								{
+									"key": "document_type",
+									"value": "original_documents"
+								},
+								{
+									"key": "filename",
+									"value": "demo_docs.pdf"
+								}
+							]
+						},
+						"description": "This endpoint is used to upload a new closings document into Snapdocs' system.\n\n**Note**: The referenced file can be found in [the QA Team's Cypress repo](https://github.com/snapdocs/automated_tests/tree/master/cypress/fixtures).\n\nIf you haven't already, create a directory in your home directory called `Postman` and then within that directory, create a `files` directory. A terminal command for this is:\n```bash\nmkdir -p ~/Postman/files\n```\n\nThe online location of this file is:\n\n`automated_tests/cypress/fixtures/4506t.pdf`\n\nYou should save this file in the above-referenced `~/Postman/files` directory."
+					},
+					"response": []
+				},
+				{
+					"name": "step 3 submit closing",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents/submit?document_type=original_documents",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents",
+								"submit"
+							],
+							"query": [
+								{
+									"key": "document_type",
+									"value": "original_documents"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Query Closing",
+			"item": [
+				{
+					"name": "Get Closing Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/status",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"status"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Closing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch closing uuid by external identifier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{external_system}}/{{external_type}}/{{external_value}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{external_system}}",
+								"{{external_type}}",
+								"{{external_value}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Manage Closing",
+			"item": [
+				{
+					"name": "complete closing",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/complete",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel closing",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/cancel",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscriptions",
+			"item": [
+				{
+					"name": "Create subscription",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"webhook_id\", jsonData.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"los testing webhook\",\n    \"webhook_url\": \"{{webhookUrl}}\",\n    \"events\": [\"borrower.*\", \"document.*\", \"closing.*\", \"notary.*\",\n     \"status.changed\",\"quality_control.*\"]\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/subscriptions",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions"
+							]
+						},
+						"description": "POST path '/api/v1/subscriptions'"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete subscription",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 - OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/subscriptions/{{subscription_id}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"{{subscription_id}}"
+							]
+						},
+						"description": "POST path '/api/v1/subscriptions'"
+					},
+					"response": []
+				},
+				{
+					"name": "List subscriptions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/subscriptions",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Full Redraw",
+			"item": [
+				{
+					"name": "Step 1 full redraw",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"ClosingUUID\", jsonData.closing_uuid);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// today format yyyy-mm-dd",
+									"var d1 = new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0];",
+									"var today = new Date()",
+									"var ts = (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0') +today.getHours().toString().padStart(2, '0') + today.getMinutes().toString().padStart(2, '0')",
+									"pm.collectionVariables.set(\"appointment_earliest_at\", today.toISOString().split('T')[0]);",
+									"pm.collectionVariables.set(\"appointment_date\", today.toISOString().split('T')[0]);",
+									"",
+									"today.setDate(today.getDate() + 7)",
+									"pm.collectionVariables.set(\"appointment_latest_at\", today.toISOString().split('T')[0]);",
+									"",
+									"pm.collectionVariables.set(\"borrower_1_last_name\", \"Test\" + ts)",
+									"pm.collectionVariables.set(\"borrower_1_email\", \"borrower1.Test\" + ts+\"@snapdocs.com\")",
+									"pm.collectionVariables.set(\"borrower_2_last_name\", \"Test\" + ts)",
+									"pm.collectionVariables.set(\"borrower_2_email\", \"borrower2.Test\" + ts+\"@snapdocs.com\")",
+									"pm.collectionVariables.set(\"file_number\", \"file\"+ts)",
+									"pm.collectionVariables.set(\"external_value\", \"loan\" + ts)",
+									"pm.collectionVariables.set(\"timestamp\", ts)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"signing_method\": \"hybrid\",\n  \"reference_id\": \"{{loan_guid}}\",\n     \"file_number\": \"{{file_number}}\",\n     \"property_street_address\": \"123 Main Street\",\n     \"property_city\": \"Austin\",\n     \"property_state\": \"Texas\",\n     \"property_zip\": \"78701\",\n     \"appointment_earliest_at\": \"{{appointment_earliest_at}}\",\n    \"appointment_latest_at\": \"{{appointment_latest_at}}\",\n    \"appointment_date\": \"{{appointment_date}}\",\n    \"appointment_time\": \"11:45 pm\",\n     \"settlement_office_email\": \"settlement@settlement.com\",\n     \"settlement_office_name\": \"Settlement Office\",\n    \"loan_type\": \"Conventional\",\n    \"loan_purpose\": \"Purchase\",\n     \"borrowers\": [\n          {\n               \"first_name\": \"{{borrower_1_first_name}}\",\n               \"last_name\": \"{{borrower_1_last_name}}\",\n               \"email\": \"{{borrower_1_email}}\",\n               \"phone\": \"{{borrower_1_phone}}\"\n          }\n     ],\n     \"closing_users\": [\n         {\n            \"first_name\": \"The\",\n            \"last_name\": \"Closer\",\n            \"phone\": \"5555555555\",\n            \"email\": \"jerry.you+closinguser@snapdocs.com\",\n            \"roles\": [\n                \"closer\"\n            ]\n        },\n         {\n            \"first_name\": \"The\",\n            \"last_name\": \"Scheduler\",\n            \"phone\": \"5555555555\",\n            \"email\": \"jerry.you+lenderconnectedclient@snapdocs.com\",\n            \"roles\": [\n               \n            ]\n        }\n     ],\n     \"settlement_agents\": [\n          {\n               \"first_name\": \"Settlement\",\n               \"last_name\": \"Agent\",\n               \"email\": \"sa@settlement.com\"\n          }\n     ],\n     \"external_identifiers\": [\n        {\n               \"external_system\": \"{{external_system1}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system2}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        },\n        {\n               \"external_system\": \"{{external_system3}}\",\n               \"external_type\": \"{{external_type}}\",\n               \"value\": \"{{external_value}}\"            \n        }\n     ]\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/full_redraw",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"full_redraw"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				},
+				{
+					"name": "step 2 upload original document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/pdf",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "demo_docs.pdf"
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents?document_type=original_documents&filename=demo_docs.pdf",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents"
+							],
+							"query": [
+								{
+									"key": "document_type",
+									"value": "original_documents"
+								},
+								{
+									"key": "filename",
+									"value": "demo_docs.pdf"
+								}
+							]
+						},
+						"description": "This endpoint is used to upload a new closings document into Snapdocs' system.\n\n**Note**: The referenced file can be found in [the QA Team's Cypress repo](https://github.com/snapdocs/automated_tests/tree/master/cypress/fixtures).\n\nIf you haven't already, create a directory in your home directory called `Postman` and then within that directory, create a `files` directory. A terminal command for this is:\n```bash\nmkdir -p ~/Postman/files\n```\n\nThe online location of this file is:\n\n`automated_tests/cypress/fixtures/4506t.pdf`\n\nYou should save this file in the above-referenced `~/Postman/files` directory."
+					},
+					"response": []
+				},
+				{
+					"name": "step 3 submit closing",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents/submit?document_type=original_documents",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents",
+								"submit"
+							],
+							"query": [
+								{
+									"key": "document_type",
+									"value": "original_documents"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Signing Appointment",
+			"item": [
+				{
+					"name": "Get Closing Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/appointment",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"appointment"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Closing Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"street_address\": \"123 Main St\",\n    \"city\": \"Austin\",\n    \"state\": \"TX\",\n    \"zip\": \"78701\",\n    \"date\": \"2022-06-10\",\n    \"time\": \"11:45 pm\",\n    \"timezone\": \"Central Time (US & Canada)\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/appointment",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"appointment"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Borrowers",
+			"item": [
+				{
+					"name": "Get Borrowers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"// this is the URL that you want user to redirect to after borrower finish esigning and click the \"back to dashboard\"",
+									"const posDashboardUrl = \"https://www.google.com\"",
+									"",
+									"for (i in jsonData.borrowers) {",
+									"    let borrower = jsonData.borrowers[i]",
+									"    borrowerAccessToken = borrower.access_token",
+									"    previewUrl = pm.collectionVariables.get(\"BaseUrl\").replace(\"api\", \"app\") + \"/secure_access?secure_token=\"+ borrowerAccessToken + \"&act=preview&redirect_url=\" + posDashboardUrl",
+									"    console.log('url for ' + borrower.first_name+' to preview ' + previewUrl)",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/borrowers",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"borrowers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "opt out",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"borrower_uuid\": \"{{borrower_uuid}}\",\n    \"opt_out_reason\": \"I'd like to sign in person\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/esigning/opt_out",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"esigning",
+								"opt_out"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "opt in",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"borrower_uuid\": \"{{borrower_uuid}}\",\n    \"opt_out_reason\": \"I want to esign\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/esigning/opt_in",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"esigning",
+								"opt_in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Documents",
+			"item": [
+				{
+					"name": "Upload Redraw Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/pdf",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "demo_docs.pdf"
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents?document_type=redraw_documents&filename=demo_docs.pdf",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents"
+							],
+							"query": [
+								{
+									"key": "document_type",
+									"value": "redraw_documents"
+								},
+								{
+									"key": "filename",
+									"value": "demo_docs.pdf"
+								}
+							]
+						},
+						"description": "This endpoint is used to upload a new closings document into Snapdocs' system.\n\n**Note**: The referenced file can be found in [the QA Team's Cypress repo](https://github.com/snapdocs/automated_tests/tree/master/cypress/fixtures).\n\nIf you haven't already, create a directory in your home directory called `Postman` and then within that directory, create a `files` directory. A terminal command for this is:\n```bash\nmkdir -p ~/Postman/files\n```\n\nThe online location of this file is:\n\n`automated_tests/cypress/fixtures/4506t.pdf`\n\nYou should save this file in the above-referenced `~/Postman/files` directory."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Closing Documents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				},
+				{
+					"name": "Dowload Document",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents/{{document_id}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents",
+								"{{document_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Post Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.environment.set(\"webhook_id\", jsonData.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"user_uuid\": \"{{closing_user_uuid}}\",\n     \"text\": \"Will you be availble to sign the document next Tuesday?\",\n     \"mobile_notary_participant_visible\": false,\n     \"notary_visible\": false,\n     \"participant_visible\": false,\n     \"scheduler_visible\": false,\n     \"settlement_agent_visible\": true,\n     \"consumer_visible\": true,\n     \"lender_visible\": true\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/comments",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"comments"
+							]
+						},
+						"description": "POST path '/api/v1/subscriptions'"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comment by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/comments/{{comment_uuid}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"comments",
+								"{{comment_uuid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/comments",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Compliance",
+			"item": [
+				{
+					"name": "Get Audit Trail of Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date\": \"2022-05-24\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/audit_trail",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"audit_trail"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Audit Trail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/audit_trail",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"audit_trail"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Scanbacks",
+			"item": [
+				{
+					"name": "Upload scanback document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/pdf",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "scanback.pdf"
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents?document_type=scanback_documents&filename=scanback.pdf",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents"
+							],
+							"query": [
+								{
+									"key": "document_type",
+									"value": "scanback_documents"
+								},
+								{
+									"key": "filename",
+									"value": "scanback.pdf"
+								}
+							]
+						},
+						"description": "This endpoint is used to upload a new closings document into Snapdocs' system.\n\n**Note**: The referenced file can be found in [the QA Team's Cypress repo](https://github.com/snapdocs/automated_tests/tree/master/cypress/fixtures).\n\nIf you haven't already, create a directory in your home directory called `Postman` and then within that directory, create a `files` directory. A terminal command for this is:\n```bash\nmkdir -p ~/Postman/files\n```\n\nThe online location of this file is:\n\n`automated_tests/cypress/fixtures/4506t.pdf`\n\nYou should save this file in the above-referenced `~/Postman/files` directory."
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Scanbacks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": ""
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/documents/submit?document_type=scanback_documents",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"documents",
+								"submit"
+							],
+							"query": [
+								{
+									"key": "document_type",
+									"value": "scanback_documents"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quality_Control",
+			"item": [
+				{
+					"name": "get closing quality control results",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ApiToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/api/v1/closings/{{ClosingUUID}}/quality_control",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"closings",
+								"{{ClosingUUID}}",
+								"quality_control"
+							]
+						},
+						"description": "use the access token from prev call"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"ApiToken\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"grant_type\": \"client_credentials\",\n    \"client_id\": \"{{ClientId}}\",\n    \"client_secret\": \"{{ClientSecret}}\",\n    \"audience\": \"{{audience}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AuthBaseUrl}}/oauth/token",
+					"host": [
+						"{{AuthBaseUrl}}"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "AuthBaseUrl",
+			"value": "https://login.demo-eks.snpd.io",
+			"type": "default"
+		},
+		{
+			"key": "BaseUrl",
+			"value": "https://api.cx-int0.snpd.io",
+			"type": "default"
+		},
+		{
+			"key": "ClientId",
+			"value": "HXcpqlxOEBNMHxv5wIxBxYvsLnPqmQMo",
+			"type": "default"
+		},
+		{
+			"key": "ClientSecret",
+			"value": "QIBtfjn8iTiCSdWx1Ql5McKmpxPzr71lITRVd80XEyXBpHyffJWW76oYflTwJXB1",
+			"type": "default"
+		},
+		{
+			"key": "ApiToken",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "audience",
+			"value": "https://api.*.snpd.io",
+			"type": "default"
+		},
+		{
+			"key": "ClosingUUID",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "appointment_earliest_at",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "appointment_latest_at",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "appointment_date",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "borrower_1_first_name",
+			"value": "Borrower1",
+			"type": "default"
+		},
+		{
+			"key": "borrower_1_email",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "borrower_1_last_name",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "borrower_2_first_name",
+			"value": "Borrower2",
+			"type": "default"
+		},
+		{
+			"key": "borrower_2_email",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "borrower_2_last_name",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "file_number",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "timestamp",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "external_system1",
+			"value": "other_los",
+			"type": "default"
+		},
+		{
+			"key": "external_system2",
+			"value": "other_tps",
+			"type": "default"
+		},
+		{
+			"key": "external_system3",
+			"value": "other_pos",
+			"type": "default"
+		},
+		{
+			"key": "external_type",
+			"value": "loan_guid",
+			"type": "default"
+		},
+		{
+			"key": "external_value",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "borrower_1_phone",
+			"value": "800-800-8080",
+			"type": "default"
+		},
+		{
+			"key": "borrower_2_phone",
+			"value": "800-800-8080",
+			"type": "default"
+		},
+		{
+			"key": "webhookUrl",
+			"value": "SET THE WEBHOOK LISTENER URL",
+			"type": "default"
+		}
+	]
+}
