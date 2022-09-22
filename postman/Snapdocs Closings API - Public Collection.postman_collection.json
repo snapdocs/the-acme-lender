@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "856262c4-2d28-490a-9cd9-665a04ab446c",
+		"_postman_id": "3408ac42-955f-41b0-b403-51cfc645bb15",
 		"name": "Snapdocs Closings API - Public Collection",
 		"description": "This collection presents the basic client use cases of **Snapdocs's** Closings API.\n\nVersion 1.0\n\n* * *\n\nThis collection works in conjunction with the Postman \"Public Collection\" environment to provide users a way to run simple end-to-end (ETE) closing workflows. The collection works by saving request responses into environment variables and using the variables in subsequent requests. For example, upon creating a closing, the new closing UUID will be saved and used to upload documents to that closing in a subsequent request.\n\nBefore using this collection, please do the following:\n\n*   Download the collection and environment JSON files from .\n*   Import both JSON files into your Postman workspace.\n*   Navigate the left navigation menu to Environment => Public Collection and update the variables for your environment. Some default values have been provided for a basic demo. However, you may need to update some variables based on customer support's recommendations. The most important variables are:\n    *   AuthBaseUrl - *URL for acquiring an authentication token*\n    *   BaseUrl - *URL to access the Closings API*\n    *   AdminClientId - *the preconfigured client ID for.authentication*\n    *   AdminClientSecret - *the preconfigured client secret for authentication*\n    *   company_id - *Snapdocs's assigned company ID for your organization*\n*   Select the Public Collection environment.\n    \n\nOnce the environment is set up for the Postman collection runner, you can -\n\n*   Select the entire collection and click 'Run' to execute all the workflows contained. Or,\n*   Run individual workflows by -\n    *   Select the 'Auth => Regular Use' sub-folder and click 'Run' to obtain an authenticated client.\n    *   Select any of the individual workflows and click 'Run'. For example, I can select the 'Closings => ETE Happy Path Wet Closing' sub-folder to tryout some common API requests leading from creating a wet closing to completing it.\n\n* * *\n\nFor detailed descriptions of the API and user guides, please refer to [the API documentation](https://snapdocs-closings.readme.io/reference/intro).\n\nQuestions? Please contact [api@snapdocs.com](mailto:api@snapdocs.com)",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19510697"
 	},
 	"item": [
 		{
@@ -46,7 +47,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"grant_type\": \"client_credentials\",\n    \"client_id\": \"{{ClientID}}\",\n    \"client_secret\": \"{{ClientSecret}}\",\n    \"scope\": \"borrower_activities:index users:index transaction_statuses:index closings:create closings:external_look_up closings:show closings:mark_finished_uploading_docs documents:create documents:index documents:show subscriptions:create subscriptions:destroy subscriptions:index borrowers:index\"\n}",
+									"raw": "{\n    \"grant_type\": \"client_credentials\",\n    \"client_id\": \"{{ClientId}}\",\n    \"client_secret\": \"{{ClientSecret}}\",\n    \"audience\": \"{{audience}}\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
