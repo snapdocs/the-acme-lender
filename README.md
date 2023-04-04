@@ -1,3 +1,6 @@
+# Spring 2023 Update
+This repository was built in service of APIs and helping various integrators understand how to use our APIs, sample code that we might hand out.  We are not actively maintaining this at this time, as most lenders or other integrators get their support from Snapdocs in non-sample-code manners.
+
 # The ACME Lender
 
 This repository has the example code to help our customers to test and integrate with the Snapdocs APIs.
